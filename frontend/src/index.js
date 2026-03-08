@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import ReactDOM from 'react-dom/client';
-import { Bell, Home, Calendar, Search, User, Heart, Sparkles, Star, BookOpen, ChevronRight, ArrowLeft, Play, CheckCircle2, Check } from 'lucide-react';
+import { Bell, Home, Calendar, Search, User, Heart, Sparkles, Star, BookOpen, ChevronRight, ArrowLeft, Play, CheckCircle, Check } from 'lucide-react';
 
 /**
  * Декоративные контурные фигуры для карточек.
@@ -438,7 +438,7 @@ function App() {
 
       {toastVisible && (
         <div className="fixed top-10 left-1/2 -translate-x-1/2 z-[10001] bg-black text-white px-8 py-4 rounded-full flex items-center gap-3 shadow-[0_20px_50px_rgba(0,0,0,0.4)] animate-in fade-in slide-in-from-top-4 duration-300">
-          <CheckCircle2 size={24} className="text-[#FFD644]" />
+          <CheckCircle size={24} className="text-[#FFD644]" />
           <span className="font-black uppercase tracking-tighter text-[16px]">Заявка успешно отправлена! 🚀</span>
         </div>
       )}
@@ -563,6 +563,9 @@ function App() {
     </div>
   );
 }
+
+// Экспорт для корректной работы сборщиков (Vite/Vercel)
+export default App;
 
 // Запуск приложения
 const rootElement = document.getElementById('root');
