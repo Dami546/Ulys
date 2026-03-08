@@ -1,6 +1,6 @@
-
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Bell, Home, Calendar, Search, User, Heart, Sparkles, Star, BookOpen, ChevronRight, ArrowLeft, Play, CheckCircle2, Check } from 'lucide-react';
+
 
 /**
  * Декоративные контурные фигуры для карточек.
