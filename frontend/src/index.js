@@ -1,9 +1,10 @@
-import './index.css';
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
 import { Bell, Home, Calendar, Search, User, Heart, Sparkles, Star, BookOpen } from 'lucide-react';
 
 /**
- * Декоративные контурные фигуры для карточек, как на твоих макетах.
+ * Декоративные контурные фигуры для карточек
  */
 const CardShapes = ({ type }) => {
   const strokeW = "0.8"; 
@@ -87,7 +88,7 @@ const EventCard = ({ title, subtitle, color, rating, time, date, shapeType, isHe
   </div>
 );
 
-export default function App() {
+const App = () => {
   const [activeCategory, setActiveCategory] = useState('Главная');
   
   return (
@@ -99,7 +100,7 @@ export default function App() {
         * { font-family: 'Arimo', sans-serif; -webkit-tap-highlight-color: transparent; }
       `}</style>
 
-      {/* Шапка (Приветствие) */}
+      {/* Шапка */}
       <header className="px-6 pt-14 pb-6 flex justify-between items-start">
         <h1 className="text-[50px] font-black tracking-tighter text-black leading-none">
           Привет, Паша!
@@ -124,7 +125,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* Основной контент (Списки карточек) */}
+      {/* Списки карточек */}
       {[
         { title: 'Форумы', color: '#FF3B30', events: [
           { title: 'Kuanysh Forum', sub: 'STEM Направление', color: '#FF3B30', shape: 'lightning-with-circle', rating: '4.9', time: '10:00', date: '12 Июня' },
@@ -162,7 +163,7 @@ export default function App() {
         </section>
       ))}
 
-      {/* Нижняя навигация */}
+      {/* Навигация */}
       <nav className="fixed bottom-8 left-6 right-6 bg-white border border-gray-100 rounded-[40px] py-4 px-10 flex justify-between items-center shadow-[0_20px_50px_rgba(0,0,0,0.15)] z-50">
         <Home size={28} className="text-[#FF3B30]" strokeWidth={2.5} />
         <Calendar size={28} className="text-black" />
@@ -176,3 +177,11 @@ export default function App() {
     </div>
   );
 }
+
+// Запуск приложения
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
