@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import ReactDOM from 'react-dom/client';
 import { Bell, Home, Calendar, Search, User, Heart, Sparkles, Star, BookOpen, ChevronRight, ArrowLeft, Play, CheckCircle2, Check } from 'lucide-react';
-
 
 /**
  * Декоративные контурные фигуры для карточек.
@@ -178,7 +178,7 @@ const DetailScreen = ({ event, onBack, isHearted, onToggleHeart, onApply, isAppl
   );
 };
 
-export default function App() {
+function App() {
   const [activeCategory, setActiveCategory] = useState('Главная');
   const [showDropdown, setShowDropdown] = useState(false);
   const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 });
@@ -332,7 +332,7 @@ export default function App() {
       date: 'Сегодня', 
       isToday: true,
       description: "Лидерство — это ответственность. Присоединяйся к экологическому движению Buginde и сделай свой город чище.",
-      image: "/eco_score.jpg.png"
+      image: "/eco_score.jpg"
     },
     { 
       id: 'ev-11', 
@@ -561,5 +561,16 @@ export default function App() {
         </nav>
       </div>
     </div>
+  );
+}
+
+// Запуск приложения
+const rootElement = document.getElementById('root');
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
   );
 }
