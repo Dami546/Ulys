@@ -93,14 +93,10 @@ const EventCard = ({ id, title, subtitle, color, rating, time, date, shapeType, 
   </div>
 );
 
-/**
- * Экран детального просмотра мероприятия
- */
 const DetailScreen = ({ event, onBack, isHearted, onToggleHeart, onApply, isApplied }) => {
   return (
     <div className="fixed inset-0 z-[1000] bg-white overflow-y-auto animate-in fade-in slide-in-from-right duration-300">
       <div className="max-w-[500px] mx-auto min-h-screen pb-10 flex flex-col">
-        {/* Шапка */}
         <header className="px-6 pt-10 pb-6 flex items-center gap-4">
           <button onClick={onBack} className="p-1 -ml-1 active:scale-90 transition-transform">
             <ArrowLeft size={32} strokeWidth={2.5} className="text-black" />
@@ -110,13 +106,13 @@ const DetailScreen = ({ event, onBack, isHearted, onToggleHeart, onApply, isAppl
           </h1>
         </header>
 
-        {/* Видео-плеер */}
         <div className="px-6 mb-6">
           <div className="relative aspect-video rounded-[40px] overflow-hidden bg-gray-100 shadow-xl group cursor-pointer">
             <img 
-              src={event.image || "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1000&auto=format&fit=crop"} 
+              src={event.image} 
               alt="Preview" 
               className="w-full h-full object-cover grayscale-[10%]"
+              onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1000&auto=format&fit=crop"; }}
             />
             <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
@@ -126,7 +122,6 @@ const DetailScreen = ({ event, onBack, isHearted, onToggleHeart, onApply, isAppl
           </div>
         </div>
 
-        {/* Описание */}
         <div className="px-6 flex-grow">
           <div className="bg-[#FFD644] rounded-[40px] p-8 shadow-sm">
             <p className="text-black font-bold text-[16px] leading-[1.6] whitespace-pre-wrap">
@@ -135,7 +130,6 @@ const DetailScreen = ({ event, onBack, isHearted, onToggleHeart, onApply, isAppl
           </div>
         </div>
 
-        {/* Нижняя плашка действий */}
         <div className="px-6 mt-8 flex gap-3 items-center">
           <div 
             onClick={!isApplied ? onApply : undefined}
@@ -210,8 +204,8 @@ export default function App() {
       time: '09:00', 
       date: '25 Октября', 
       isToday: false,
-      description: "Стань частью будущего цифрового Казахстана! На Buginde тебя ждут встречи с основателями глобальных единорогов и презентации прорывных технологий. Прокачай свои лидерские качества в мире IT и найди единомышленников для реализации самых смелых идей. Твой путь к успеху начинается здесь!",
-      image: "https://images.unsplash.com/photo-1540575861501-7ad05823c23d?q=80&w=1000"
+      description: "Стань частью будущего цифрового Казахстана! На Buginde тебя ждут встречи с основателями глобальных единорогов и презентации прорывных технологий.",
+      image: "/astana_forum.jpg"
     },
     { 
       id: 'ev-2', 
@@ -224,8 +218,8 @@ export default function App() {
       time: '14:30', 
       date: '18 Июня', 
       isToday: false,
-      description: "Добро пожаловать на главную площадку нетворкинга! Мы создаем условия для твоего роста: знакомься с инвесторами, изучай кейсы успешных стартапов и развивай потенциал лидера. Интерактивные сессии и экспо-зона помогут тебе увидеть, как технологии меняют регион прямо сейчас.",
-      image: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?q=80&w=1000"
+      description: "Добро пожаловать на главную площадку нетворкинга! Мы создаем условия для твоего роста: знакомься с инвесторами и изучай кейсы.",
+      image: "/central_asia_tech.jpg"
     },
     { 
       id: 'ev-3', 
@@ -238,8 +232,8 @@ export default function App() {
       time: '10:00', 
       date: 'Сегодня', 
       isToday: true,
-      description: "Готов бросить вызов системе? 48 часов кодинга, где ты и твоя команда создадите будущее на Web3. Разрабатывай dApps, решай сложные алгоритмические задачи и соревнуйся за призовой фонд. Прояви свои навыки инженера и стань легендой в блокчейн-сообществе!",
-      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000"
+      description: "Готов бросить вызов системе? 48 часов кодинга, где ты и твоя команда создадите будущее на Web3.",
+      image: "/decentralized.jpg"
     },
     { 
       id: 'ev-4', 
@@ -252,8 +246,8 @@ export default function App() {
       time: 'Онлайн', 
       date: 'Сен 2026', 
       isToday: false,
-      description: "Учись создавать интерфейсы, которыми будут пользоваться миллионы! В рамках этого курса ты освоишь Figma, основы UX-исследований и прототипирование. Интерактивные задания от экспертов Google помогут тебе раскрыть творческий потенциал и получить сертификат мирового уровня.",
-      image: "https://images.unsplash.com/photo-1586717791821-3f44a563eb4c?q=80&w=1000"
+      description: "Учись создавать интерфейсы, которыми будут пользоваться миллионы! Освоишь Figma и основы UX-исследований.",
+      image: "/google_ux_design.jpg"
     },
     { 
       id: 'ev-5', 
@@ -266,8 +260,8 @@ export default function App() {
       time: '09:00', 
       date: 'Декабрь 2026', 
       isToday: false,
-      description: "Форум для будущих дипломатов и глобальных лидеров. Здесь ты научишься вести переговоры на английском, отстаивать свою позицию и решать мировые конфликты. Участие в модели ООН — это твой шанс развить критическое мышление и стать частью международного сообщества.",
-      image: "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1000"
+      description: "Форум для будущих дипломатов и глобальных лидеров. Научись вести переговоры и решать мировые конфликты.",
+      image: "/aimun_2026.jpg"
     },
     { 
       id: 'ev-6', 
@@ -280,8 +274,8 @@ export default function App() {
       time: '11:00', 
       date: '25 Мая', 
       isToday: false,
-      description: "Математика — это язык будущего. Прими участие в интеллектуальном вызове, где логика и нестандартное мышление ценятся превыше всего. Докажи свой уровень мастерства в STEM и получи уникальную возможность выиграть образовательный грант в топовый технический вуз.",
-      image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=1000"
+      description: "Математика — это язык будущего. Прими участие в интеллектуальном вызове и докажи свой уровень мастерства.",
+      image: "/istj_olympiad.jpg"
     },
     { 
       id: 'ev-7', 
@@ -294,8 +288,8 @@ export default function App() {
       time: '19:00', 
       date: 'Сегодня', 
       isToday: true,
-      description: "Место встречи идей и капитала. Участвуй в закрытых питч-сессиях, слушай советы опытных менторов и учись презентовать свои проекты. Это твоя площадка для старта в большой бизнес и реальная возможность найти поддержку для своего будущего единорога.",
-      image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?q=80&w=1000"
+      description: "Закрытые питч-сессии стартапов перед бизнес-ангелами. Узнай, как привлечь первые инвестиции.",
+      image: "/startup_almaty.jpg"
     },
     { 
       id: 'ev-8', 
@@ -308,8 +302,8 @@ export default function App() {
       time: 'Full-time', 
       date: 'Лето 2026', 
       isToday: false,
-      description: "Твой пропуск в мир BigTech! Стажировка STEP создана специально для талантливых студентов младших курсов. Работай над реальными проектами Google под руководством топовых инженеров, развивай навыки программирования и почувствуй, что значит менять мир кодом.",
-      image: "https://images.unsplash.com/photo-1573164713988-8665fc963095?q=80&w=1000"
+      description: "Стажировка STEP создана специально для талантливых студентов младших курсов. Работай над реальными проектами Google.",
+      image: "/google_step.jpg"
     },
     { 
       id: 'ev-9', 
@@ -322,8 +316,8 @@ export default function App() {
       time: 'Part-time', 
       date: 'Июль 2026', 
       isToday: false,
-      description: "Погрузись в анализ данных самого успешного финтех-проекта! Учись строить предиктивные модели, работать с SQL и Python на реальных данных миллионов пользователей. Прокачай свои аналитические способности и стань востребованным специалистом в индустрии данных.",
-      image: "https://images.unsplash.com/photo-1551288049-bbdac8626ad1?q=80&w=1000"
+      description: "Погрузись в анализ данных самого успешного финтех-проекта! Учись строить предиктивные модели.",
+      image: "/kaspi_lab.jpg"
     },
     { 
       id: 'ev-10', 
@@ -336,8 +330,8 @@ export default function App() {
       time: '08:00', 
       date: 'Сегодня', 
       isToday: true,
-      description: "Лидерство — это ответственность. Присоединяйся к экологическому движению Buginde и сделай свой город чище. За активное участие ты не только принесешь пользу природе, но и получишь бонусные баллы в системе, которые откроют доступ к эксклюзивным курсам.",
-      image: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=1000"
+      description: "Лидерство — это ответственность. Присоединяйся к экологическому движению Buginde и сделай свой город чище.",
+      image: "/eco_score.jpg.png"
     },
     { 
       id: 'ev-11', 
@@ -350,8 +344,8 @@ export default function App() {
       time: 'Заочно', 
       date: 'Октябрь 2026', 
       isToday: false,
-      description: "Учись у лучших умов планеты. Глубокое погружение в мир нейронных сетей и ИИ на основе легендарной программы Stanford Online. Проходи видеоуроки, решай практические задачи и получи диплом, который подтвердит твой высокий потенциал в области технологий будущего.",
-      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1000"
+      description: "Учись у лучших умов планеты. Глубокое погружение в мир нейронных сетей на основе программы Stanford Online.",
+      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1000&auto=format&fit=crop"
     }
   ];
 
@@ -424,7 +418,6 @@ export default function App() {
           to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        /* АНИМАЦИЯ СТРЕЛКИ ТОЛЬКО ПРИ НАВЕДЕНИИ НА КОНТЕЙНЕР */
         @keyframes arrowBounce {
           0%, 100% { transform: translateX(0); }
           50% { transform: translateX(8px); }
@@ -434,7 +427,6 @@ export default function App() {
           animation: arrowBounce 0.8s infinite ease-in-out;
         }
 
-        /* Эффект увеличения при наведении */
         .apply-button-container:hover {
           transform: scale(1.02);
         }
@@ -443,7 +435,6 @@ export default function App() {
         }
       `}</style>
 
-      {/* УВЕДОМЛЕНИЕ */}
       {toastVisible && (
         <div className="fixed top-10 left-1/2 -translate-x-1/2 z-[10001] bg-black text-white px-8 py-4 rounded-full flex items-center gap-3 shadow-[0_20px_50px_rgba(0,0,0,0.4)] animate-in fade-in slide-in-from-top-4 duration-300">
           <CheckCircle2 size={24} className="text-[#FFD644]" />
@@ -451,7 +442,6 @@ export default function App() {
         </div>
       )}
 
-      {/* ЭКРАН ДЕТАЛЕЙ */}
       {viewingEvent && (
         <DetailScreen 
           event={viewingEvent} 
@@ -463,7 +453,6 @@ export default function App() {
         />
       )}
 
-      {/* ШАПКА И КОНТЕНТ */}
       <div className="w-full px-4 sm:px-8 md:px-12">
         <header className="pt-10 sm:pt-14 pb-8 flex justify-between items-start">
           <h1 className="text-[38px] sm:text-[50px] font-black tracking-tighter text-black leading-none">Привет, Паша!</h1>
@@ -473,7 +462,6 @@ export default function App() {
           </button>
         </header>
 
-        {/* КАТЕГОРИИ */}
         <div className="mb-8 relative">
           <div className="flex gap-2 overflow-x-auto no-scrollbar py-2 px-0.5 items-center">
             {categories.map((cat) => (
@@ -500,7 +488,6 @@ export default function App() {
             </button>
           </div>
 
-          {/* ВЫПАДАЮЩЕЕ МЕНЮ */}
           {showDropdown && (
              <div 
                ref={dropdownRef}
@@ -530,7 +517,6 @@ export default function App() {
            )}
         </div>
 
-        {/* СПИСОК МЕРОПРИЯТИЙ */}
         <div className="relative z-10">
           {sectionsToRender.map((section, idx) => (
             <section key={idx} className="mb-10 sm:mb-12">
@@ -563,7 +549,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* Навигация */}
       <div className="fixed bottom-6 left-0 right-0 flex justify-center px-4 z-[99]">
         <nav className="w-full max-w-[500px] bg-white border border-gray-100 rounded-[40px] py-4 px-10 flex justify-between items-center shadow-[0_20px_50px_rgba(0,0,0,0.15)]">
           <button onClick={() => setActiveCategory('Главная')}><Home size={26} className={activeCategory === 'Главная' ? "text-[#FF3B30]" : "text-black"} strokeWidth={2.5} /></button>
