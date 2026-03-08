@@ -1,3 +1,4 @@
+import './index.css';
 import React, { useState } from 'react';
 import { Bell, Home, Calendar, Search, User, Heart, Sparkles, Star, BookOpen } from 'lucide-react';
 
