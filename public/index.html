@@ -2,11 +2,45 @@
 <html lang="ru">
   <head>
     <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Ulys — Платформа для подростков</title>
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Ulys App - Мобильное приложение" />
+    
+    <!-- Подключение шрифтов (Arimo) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
+    <!-- Подключение Tailwind CSS через CDN (для быстрого старта без сложной настройки) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Arimo', 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+
+    <title>Ulys App</title>
+    <style>
+      body {
+        margin: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        background-color: #f9fafb;
+      }
+    </style>
   </head>
   <body>
+    <noscript>Вам нужно включить JavaScript, чтобы запустить это приложение.</noscript>
+    
+    <!-- КРИТИЧЕСКИ ВАЖНО: именно сюда React вставит ваш App.js -->
     <div id="root"></div>
+
   </body>
 </html>
