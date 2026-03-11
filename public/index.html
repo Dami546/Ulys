@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
+<head>
     <meta charset="utf-8" />
+    <!-- Процентный путь важен для сборки React -->
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="Ulys App - Мобильное приложение" />
-    
-    <!-- Подключение шрифтов (Arimo) -->
+
+    <!-- Подключаем шрифт Arimo -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 
-    <!-- Подключение Tailwind CSS через CDN (для быстрого старта без сложной настройки) -->
+    <!-- Подключаем Tailwind CSS через CDN для корректной работы стилей из App.js -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -30,17 +31,19 @@
     <style>
       body {
         margin: 0;
+        font-family: 'Arimo', sans-serif;
         -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        background-color: #f9fafb;
+        background-color: #ffffff;
+        overflow-x: hidden;
       }
+      /* Убираем синее выделение при тапах на мобилках */
+      * { -webkit-tap-highlight-color: transparent; }
     </style>
-  </head>
-  <body>
-    <noscript>Вам нужно включить JavaScript, чтобы запустить это приложение.</noscript>
+</head>
+<body>
+    <noscript>Для работы этого приложения вам нужно включить JavaScript в браузере.</noscript>
     
-    <!-- КРИТИЧЕСКИ ВАЖНО: именно сюда React вставит ваш App.js -->
+    <!-- Сюда React будет "рисовать" всё приложение -->
     <div id="root"></div>
-
-  </body>
+</body>
 </html>
