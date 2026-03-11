@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Bell, Home, Calendar, Search, User, Heart, Sparkles, Star, BookOpen, ChevronRight, ArrowLeft, Play, CheckCircle2, Check, X, MessageCircle, Trophy, Clock, BellRing, ExternalLink, SlidersHorizontal, MapPin, Globe, CreditCard } from 'lucide-react';
+import { Bell, Home, Calendar, Search, User, Heart, Sparkles, Star, BookOpen, ChevronRight, ArrowLeft, Play, CheckCircle2, Check, X, MessageCircle, Trophy, Clock, BellRing, ExternalLink, SlidersHorizontal, MapPin, Globe, CreditCard, FileText, Download, ChevronDown, Share2, Quote } from 'lucide-react';
 
 /**
  * Декоративные контурные фигуры для карточек.
@@ -186,7 +186,7 @@ const SearchScreen = ({ events, onEventClick, heartedIds, onToggleHeart, EventCa
           <div className="flex flex-wrap gap-3">
             {popularTags.map(tag => (
               <button 
-                key={tag}
+                key={tag} 
                 onClick={() => setQuery(tag)}
                 className="px-8 py-4 bg-[#f2f2f2] rounded-3xl font-black text-[15px] uppercase tracking-tighter active:scale-95 transition-all text-black/70 hover:bg-[#FFD644] hover:text-black"
               >
@@ -198,7 +198,7 @@ const SearchScreen = ({ events, onEventClick, heartedIds, onToggleHeart, EventCa
       )}
 
       {showFilters && (
-        <div className="mb-12 p-10 bg-[#FFD644] rounded-[50px] shadow-2xl animate-in zoom-in-95 duration-300 relative overflow-hidden border-2 border-black">
+        <div className="mb-12 p-10 bg-[#FFD644] rounded-[50px] shadow-2xl animate-in zoom-in-95 duration-300 relative overflow-hidden">
            <div className="absolute -right-20 -top-20 w-60 h-60 bg-white/20 rounded-full blur-3xl"></div>
            <div className="relative z-10 space-y-10">
               
@@ -385,6 +385,229 @@ const DetailScreen = ({ event, onBack, isHearted, onToggleHeart, onApply, isAppl
   );
 };
 
+// ==========================================
+// КОМПОНЕНТ ПРОФИЛЯ (ProfileScreen)
+// ==========================================
+const ProfileScreen = ({ user }) => {
+  const [activeTab, setActiveTab] = useState('Активность');
+  const tabs = ['Активность', 'Портфолио', 'Отзывы'];
+
+  // Имитация данных аналитики за неделю (согласно референсу)
+  const analyticsData = [
+    { label: '08', value: 3, total: 20 },
+    { label: '09', value: 13, total: 20 },
+    { label: '10', value: 5, total: 20 },
+    { label: '11', value: 9, total: 20 },
+    { label: '12', value: 8, total: 20 },
+    { label: '01', value: 15, total: 20 },
+    { label: '02', value: 18, total: 20 },
+  ];
+
+  const yAxisValues = [20, 15, 10, 5, 0];
+
+  const reviews = [
+    { name: "Проф. Аскаров", role: "Ментор Digital Bridge", text: "Павел показал отличные навыки архитектуры систем. Его подход к оптимизации БД заслуживает похвалы.", score: 5 },
+    { name: "Елена Ким", role: "Организатор хакатона Decentralized", text: "Очень ответственный участник. Решение, которое предложила его команда, было самым стабильным.", score: 4.9 },
+    { name: "Tech Support", role: "Системный отзыв", text: "Профиль верифицирован. Все достижения подтверждены сертификатами.", score: 5.0 }
+  ];
+
+  return (
+    <div className="animate-in fade-in slide-in-from-bottom-6 duration-500 pb-24 px-2">
+      {/* Секция Аватарки и Имени */}
+      <div className="flex items-center gap-6 mb-10">
+        <div className="relative">
+          {/* Аватарка Ulys */}
+          <div className="w-[140px] h-[140px] rounded-full bg-[#FF3B30] border-[3px] border-black flex items-center justify-center overflow-hidden shadow-xl">
+             <span className="text-white text-[42px] font-black tracking-tight leading-none">Ulys</span>
+          </div>
+          {/* Маленький декоративный кружок */}
+          <div className="absolute bottom-2 right-2 w-10 h-10 bg-[#FFD644] border-[3px] border-black rounded-full shadow-md"></div>
+        </div>
+        
+        <div className="flex flex-col">
+          <h2 className="text-[42px] font-black tracking-tighter text-black uppercase leading-[0.9] mb-2">
+            Паша<br/>Бикович
+          </h2>
+          <div className="flex items-center gap-1.5 text-[#FF3B30]">
+             <MapPin size={18} fill="currentColor" stroke="none" />
+             <span className="font-bold text-[18px]">г. Алматы</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Переключатель вкладок в стиле Необрутализм */}
+      <div className="bg-white border-[2.5px] border-black rounded-[32px] p-2 flex gap-1 mb-10 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)]">
+        {tabs.map(tab => (
+          <button 
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`flex-grow py-5 rounded-[24px] font-black text-[16px] uppercase tracking-tighter transition-all ${
+              activeTab === tab ? 'bg-[#FFD644] text-black shadow-inner border border-black/10' : 'bg-transparent text-black/50 hover:text-black'
+            }`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div>
+
+      {/* Контент в зависимости от вкладки */}
+      <div className="min-h-[400px]">
+        {activeTab === 'Активность' && (
+          <div className="space-y-8 animate-in fade-in duration-300">
+             {/* Блок Портфолио (краткий) */}
+             <div className="bg-white border-[2.5px] border-black rounded-[40px] p-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)]">
+               <div className="flex items-center gap-5">
+                 <div className="w-[85px] h-[85px] bg-[#FF3B30] rounded-[28px] flex items-center justify-center shrink-0 border-2 border-black/5">
+                   <FileText size={40} className="text-white" strokeWidth={1.5} />
+                 </div>
+                 <div className="flex-grow">
+                   <h4 className="font-black uppercase tracking-tighter text-[16px] leading-tight mb-1">Portfolio_PashaBikovich.pdf</h4>
+                   <button className="flex items-center gap-1 text-[#FF3B30] font-bold text-[14px] hover:underline underline-offset-4 decoration-2">
+                     Нажми, чтобы скачать
+                     <Download size={14} />
+                   </button>
+                 </div>
+               </div>
+             </div>
+
+             {/* Блок Аналитика (как на фото) */}
+             <div className="bg-white border-[2.5px] border-black rounded-[45px] p-8 shadow-[10px_10px_0px_0px_rgba(0,0,0,0.05)]">
+               <div className="flex justify-between items-center mb-10 pb-4 border-b border-black/5">
+                 <h3 className="text-[22px] font-black uppercase tracking-tighter">Аналитика</h3>
+                 <button className="flex items-center gap-1 bg-[#f5f5f5] px-5 py-2.5 rounded-full font-black text-[14px] uppercase tracking-tighter border-2 border-black">
+                   Неделя <ChevronDown size={18} />
+                 </button>
+               </div>
+
+               {/* Кастомный график (Референс image_aabf0d.png) */}
+               <div className="relative flex px-2 h-[260px]">
+                  {/* Y-Axis labels */}
+                  <div className="flex flex-col justify-between items-end pr-4 py-1 text-[13px] font-black text-black/40 w-8">
+                     {yAxisValues.map(v => <span key={v}>{v}</span>)}
+                  </div>
+                  
+                  {/* Bars container */}
+                  <div className="flex-grow flex justify-between items-end relative">
+                     {/* Horizontal grid lines */}
+                     <div className="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-[0.03]">
+                        {[0, 1, 2, 3, 4].map(i => <div key={i} className="w-full h-[1px] bg-black"></div>)}
+                     </div>
+
+                     {analyticsData.map((item, i) => (
+                       <div key={i} className="flex flex-col items-center gap-4 group flex-1">
+                         <div className="w-[20px] h-[200px] bg-[#FF3B30] rounded-full relative overflow-hidden shadow-sm">
+                           {/* Желтая часть прогресса (верхняя согласно фото или нижняя) */}
+                           {/* В референсе красная часть - это фон/остаток, а желтая - значение */}
+                           <div 
+                             className="absolute bottom-0 left-0 right-0 bg-[#FFD644] rounded-full transition-all duration-1000 ease-out"
+                             style={{ height: `${(item.value / item.total) * 100}%` }}
+                           ></div>
+                         </div>
+                         <span className="text-[14px] font-black text-black/30 group-hover:text-black transition-colors">{item.label}</span>
+                       </div>
+                     ))}
+                  </div>
+               </div>
+             </div>
+          </div>
+        )}
+
+        {activeTab === 'Портфолио' && (
+          <div className="space-y-6 animate-in slide-in-from-right duration-400">
+             <div className="bg-[#FF3B30] border-[3px] border-black rounded-[45px] p-8 text-white relative overflow-hidden group shadow-[12px_12px_0px_0px_rgba(0,0,0,0.1)]">
+                <Sparkles className="absolute -right-6 -top-6 text-white/20 w-32 h-32 rotate-12 group-hover:scale-125 transition-transform" />
+                
+                <div className="flex items-center gap-5 mb-8">
+                  <div className="w-[100px] h-[100px] bg-white rounded-[32px] flex items-center justify-center shadow-xl border-2 border-black/10">
+                    <img src="https://www.ecoscore.space/img/logo.png" className="w-16 h-16 object-contain" alt="ECOSCORE" />
+                  </div>
+                  <div>
+                    <h3 className="text-[32px] font-black uppercase tracking-tighter leading-none mb-1">ECOSCORE</h3>
+                    <p className="text-[14px] font-bold opacity-80 uppercase tracking-widest">Проект-победитель Хакатона 2026</p>
+                  </div>
+                </div>
+
+                <p className="font-bold text-[18px] leading-relaxed mb-10 opacity-90 pr-10">
+                  Инновационная платформа для геймификации экологического волонтерства. Более 500 активных участников за первый месяц.
+                </p>
+
+                <div className="flex gap-4">
+                  <a 
+                    href="https://ecoscore-info.online/" 
+                    target="_blank" 
+                    rel="noreferrer"
+                    className="flex-grow bg-[#FFD644] text-black py-6 rounded-full font-black text-[18px] uppercase tracking-tighter flex items-center justify-center gap-3 active:scale-95 transition-all shadow-xl border-2 border-black"
+                  >
+                    Перейти на сайт
+                    <ExternalLink size={22} />
+                  </a>
+                  <button className="w-[78px] h-[78px] bg-black rounded-full flex items-center justify-center active:scale-90 transition-transform">
+                    <Share2 size={24} className="text-white" />
+                  </button>
+                </div>
+             </div>
+
+             <div className="bg-white border-[3px] border-black rounded-[45px] p-8 group">
+                <h4 className="text-[20px] font-black uppercase tracking-tighter mb-4">Другие проекты</h4>
+                <div className="grid grid-cols-2 gap-4">
+                   <div className="aspect-square bg-gray-100 rounded-[30px] flex items-center justify-center border-2 border-dashed border-black/20 hover:border-[#FF3B30] transition-colors cursor-pointer group">
+                      <div className="text-center">
+                         <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm border border-black/5 group-hover:scale-110 transition-transform">
+                            <Play size={20} className="text-black fill-black ml-1" />
+                         </div>
+                         <span className="text-[12px] font-black uppercase tracking-tighter text-black/40">Demo Video</span>
+                      </div>
+                   </div>
+                   <div className="aspect-square bg-gray-100 rounded-[30px] flex items-center justify-center border-2 border-dashed border-black/20 hover:border-[#FF3B30] transition-colors cursor-pointer group">
+                      <div className="text-center">
+                         <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-sm border border-black/5 group-hover:scale-110 transition-transform">
+                            <Trophy size={20} className="text-black" />
+                         </div>
+                         <span className="text-[12px] font-black uppercase tracking-tighter text-black/40">Awards</span>
+                      </div>
+                   </div>
+                </div>
+             </div>
+          </div>
+        )}
+
+        {activeTab === 'Отзывы' && (
+          <div className="space-y-6 animate-in slide-in-from-right duration-400">
+             {reviews.map((rev, idx) => (
+               <div key={idx} className="bg-white border-[2.5px] border-black rounded-[40px] p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,0.05)] relative group overflow-hidden">
+                  <Quote className="absolute -right-2 -bottom-2 w-24 h-24 text-gray-50 opacity-10 group-hover:scale-110 transition-transform" />
+                  
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="flex items-center gap-4">
+                      <div className="w-14 h-14 bg-[#FFD644] rounded-2xl flex items-center justify-center font-black border-2 border-black text-xl">
+                        {rev.name[0]}
+                      </div>
+                      <div>
+                        <h4 className="font-black text-[18px] uppercase tracking-tighter leading-none mb-1">{rev.name}</h4>
+                        <p className="text-[13px] font-bold text-[#FF3B30] uppercase tracking-widest">{rev.role}</p>
+                      </div>
+                    </div>
+                    <div className="bg-black text-[#FFD644] px-3 py-1.5 rounded-full font-black text-[12px] flex items-center gap-1">
+                      <Star size={12} fill="currentColor" /> {rev.score}
+                    </div>
+                  </div>
+
+                  <p className="font-bold text-[16px] leading-relaxed text-black/70 italic">
+                    «{rev.text}»
+                  </p>
+               </div>
+             ))}
+
+             <button className="w-full py-6 bg-gray-50 border-2 border-dashed border-black/20 rounded-[32px] font-black text-[14px] uppercase tracking-widest text-black/30 hover:bg-white hover:border-black transition-all">
+                Смотреть все 12 отзывов
+             </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const NotificationOverlay = ({ notifications, onBack, onOpenDetails }) => {
   const [activeTab, setActiveTab] = useState('Все');
   const tabs = ['Все', 'Заявки', 'Фидбэк', 'Достижения'];
@@ -422,7 +645,7 @@ const NotificationOverlay = ({ notifications, onBack, onOpenDetails }) => {
         <div className="px-6 mb-8 flex gap-2 overflow-x-auto no-scrollbar">
           {tabs.map(tab => (
             <button 
-              key={tab}
+              key={tab} 
               onClick={() => setActiveTab(tab)}
               className={`px-6 py-2 rounded-full font-black text-[14px] uppercase tracking-tighter transition-all border-2 ${
                 activeTab === tab ? 'bg-black text-white border-black' : 'bg-white text-black border-gray-100'
@@ -793,7 +1016,7 @@ export default function App() {
       image: "https://www.ecoscore.space/img/logo.png"
     }
   ];
-  
+
   const toggleHeart = (id) => {
     setHeartedIds(prev => 
       prev.includes(id) 
@@ -923,7 +1146,7 @@ export default function App() {
       <div className="w-full px-4 sm:px-8 md:px-12">
         <header className="pt-10 sm:pt-14 pb-8 flex justify-between items-start">
           <h1 className="text-[38px] sm:text-[50px] font-black tracking-tighter text-black leading-none">
-            {currentView === 'home' ? 'Привет, Паша!' : currentView === 'favorites' ? 'Избранное' : currentView === 'search' ? 'Поиск' : 'Календарь'}
+            {currentView === 'home' ? 'Привет, Паша!' : currentView === 'favorites' ? 'Избранное' : currentView === 'search' ? 'Поиск' : currentView === 'profile' ? 'Мой профиль' : 'Календарь'}
           </h1>
           {currentView === 'home' && (
             <button 
@@ -1083,6 +1306,10 @@ export default function App() {
             EventCard={EventCard}
           />
         )}
+
+        {currentView === 'profile' && (
+          <ProfileScreen user={{name: "Паша Бикович"}} />
+        )}
       </div>
 
       <div className="fixed bottom-6 left-0 right-0 flex justify-center px-4 z-[99]">
@@ -1103,8 +1330,14 @@ export default function App() {
             <BookOpen size={26} className={currentView === 'favorites' ? "text-[#FF3B30]" : "text-black"} strokeWidth={2.5} />
           </button>
           
-          <button><Sparkles size={26} className="text-black" /></button>
-          <button className="border-[2.5px] border-black rounded-xl p-0.5"><User size={22} className="text-black" /></button>
+          <button onClick={() => { setCurrentView('home'); }}><Sparkles size={26} className="text-black" /></button>
+          
+          <button 
+            onClick={() => { setCurrentView('profile'); setViewingEvent(null); }}
+            className={`border-[2.5px] rounded-xl p-0.5 transition-colors ${currentView === 'profile' ? 'border-[#FF3B30] bg-[#FF3B30]/5' : 'border-black'}`}
+          >
+            <User size={22} className={currentView === 'profile' ? "text-[#FF3B30]" : "text-black"} />
+          </button>
         </nav>
       </div>
     </div>
