@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Bell, Home, Calendar, Search, User, Heart, Sparkles, Star, BookOpen, ChevronRight, ArrowLeft, Play, CheckCircle2, Check, X, MessageCircle, Trophy, Clock, BellRing, ExternalLink } from 'lucide-react';
+import { Bell, Home, Calendar, Search, User, Heart, Sparkles, Star, BookOpen, ChevronRight, ArrowLeft, Play, CheckCircle2, Check, X, MessageCircle, Trophy, Clock, BellRing, ExternalLink, SlidersHorizontal, MapPin, Globe, CreditCard } from 'lucide-react';
 
 /**
  * Декоративные контурные фигуры для карточек.
@@ -92,6 +92,214 @@ const EventCard = ({ id, title, subtitle, color, rating, time, date, shapeType, 
     </div>
   </div>
 );
+
+// ==========================================
+// КОМПОНЕНТ ПОИСКА (SearchScreen)
+// ==========================================
+const SearchScreen = ({ events, onEventClick, heartedIds, onToggleHeart, EventCard }) => {
+  const [query, setQuery] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+  
+  const [tempFilters, setTempFilters] = useState({
+    city: 'Любой',
+    format: 'Все',
+    price: 'Все'
+  });
+
+  const [appliedFilters, setAppliedFilters] = useState({
+    city: 'Любой',
+    format: 'Все',
+    price: 'Все'
+  });
+
+  const popularTags = ['Хакатоны', 'Форумы', 'Олимпиады', 'Волонтерство', 'Стажировки'];
+
+  const filtered = useMemo(() => {
+    return events.filter(ev => {
+      const matchText = ev.title.toLowerCase().includes(query.toLowerCase()) || 
+                       ev.section.toLowerCase().includes(query.toLowerCase());
+      const matchCity = appliedFilters.city === 'Любой' || ev.city === appliedFilters.city;
+      const matchFormat = appliedFilters.format === 'Все' || ev.format === appliedFilters.format;
+      const matchPrice = appliedFilters.price === 'Все' || ev.price === appliedFilters.price;
+      return matchText && matchCity && matchFormat && matchPrice;
+    });
+  }, [query, appliedFilters, events]);
+
+  useEffect(() => {
+    if (query.length > 0 || appliedFilters.city !== 'Любой' || appliedFilters.format !== 'Все' || appliedFilters.price !== 'Все') {
+      setHasSearched(true);
+    } else {
+      setHasSearched(false);
+    }
+  }, [query, appliedFilters]);
+
+  const FilterChip = ({ label, active, onClick }) => (
+    <button 
+      onClick={onClick}
+      className={`px-6 py-4 rounded-2xl font-black text-[15px] uppercase tracking-tighter transition-all whitespace-nowrap ${
+        active 
+        ? 'bg-black text-[#FFD644] shadow-xl shadow-black/20 scale-105' 
+        : 'bg-white/50 text-black/60 hover:bg-white hover:text-black'
+      }`}
+    >
+      {label}
+    </button>
+  );
+
+  const applyResults = () => {
+    setAppliedFilters({...tempFilters});
+    setShowFilters(false);
+  };
+
+  return (
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 pb-20">
+      
+      <div className="flex gap-4 mb-8 items-center">
+        <div className="relative flex-grow group">
+          <div className="absolute inset-0 bg-black/5 rounded-[32px] group-focus-within:bg-black/10 transition-colors"></div>
+          <Search className="absolute left-8 top-1/2 -translate-y-1/2 text-black/30 group-focus-within:text-black" size={26} />
+          <input 
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Что ищем?"
+            className="relative w-full h-[85px] bg-transparent rounded-[32px] pl-20 pr-8 font-black text-[20px] outline-none transition-all placeholder:text-black/20"
+          />
+        </div>
+        
+        <button 
+          onClick={() => setShowFilters(!showFilters)}
+          className={`w-[85px] h-[85px] rounded-[32px] flex items-center justify-center transition-all shadow-2xl active:scale-90 ${
+            showFilters 
+            ? 'bg-black text-[#FFD644] rotate-90' 
+            : 'bg-[#FF3B30] text-white shadow-[#FF3B30]/30'
+          }`}
+        >
+          <SlidersHorizontal size={30} />
+        </button>
+      </div>
+
+      {!showFilters && (
+        <div className="mb-12">
+          <p className="text-[12px] font-black uppercase tracking-widest text-black/20 mb-5 ml-2">Популярное</p>
+          <div className="flex flex-wrap gap-3">
+            {popularTags.map(tag => (
+              <button 
+                key={tag}
+                onClick={() => setQuery(tag)}
+                className="px-8 py-4 bg-[#f2f2f2] rounded-3xl font-black text-[15px] uppercase tracking-tighter active:scale-95 transition-all text-black/70 hover:bg-[#FFD644] hover:text-black"
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {showFilters && (
+        <div className="mb-12 p-10 bg-[#FFD644] rounded-[50px] shadow-2xl animate-in zoom-in-95 duration-300 relative overflow-hidden border-2 border-black">
+           <div className="absolute -right-20 -top-20 w-60 h-60 bg-white/20 rounded-full blur-3xl"></div>
+           <div className="relative z-10 space-y-10">
+              
+              <div>
+                <div className="flex items-center gap-2 mb-5">
+                   <MapPin size={20} className="text-black" />
+                   <label className="text-[14px] font-black uppercase tracking-[0.1em] text-black">Город</label>
+                </div>
+                <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
+                  {['Любой', 'Алматы', 'Астана', 'Шымкент'].map(c => (
+                    <FilterChip key={c} label={c} active={tempFilters.city === c} onClick={() => setTempFilters({...tempFilters, city: c})} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
+                <div>
+                  <div className="flex items-center gap-2 mb-5">
+                     <Globe size={20} className="text-black" />
+                     <label className="text-[14px] font-black uppercase tracking-[0.1em] text-black">Формат</label>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {['Все', 'Онлайн', 'Оффлайн'].map(f => (
+                      <FilterChip key={f} label={f} active={tempFilters.format === f} onClick={() => setTempFilters({...tempFilters, format: f})} />
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-5">
+                     <CreditCard size={20} className="text-black" />
+                     <label className="text-[14px] font-black uppercase tracking-[0.1em] text-black">Цена</label>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {['Все', 'Бесплатно', 'Платно'].map(p => (
+                      <FilterChip key={p} label={p} active={tempFilters.price === p} onClick={() => setTempFilters({...tempFilters, price: p})} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <button 
+                onClick={applyResults} 
+                className="w-full bg-black text-[#FFD644] py-7 rounded-[30px] font-black text-[18px] uppercase tracking-widest active:scale-[0.98] transition-all shadow-xl shadow-black/20"
+              >
+                Показать результаты
+              </button>
+           </div>
+        </div>
+      )}
+
+      {hasSearched ? (
+        <div className="space-y-10 animate-in slide-in-from-top-4 duration-500">
+          <div className="flex justify-between items-end px-2">
+            <h2 className="text-[28px] font-black tracking-tighter uppercase">Найдено: {filtered.length}</h2>
+            <button 
+              onClick={() => { 
+                setQuery(''); 
+                setTempFilters({city: 'Любой', format: 'Все', price: 'Все'});
+                setAppliedFilters({city: 'Любой', format: 'Все', price: 'Все'}); 
+              }} 
+              className="text-red-500 font-black uppercase text-[12px] tracking-widest underline underline-offset-4"
+            >
+              Сбросить
+            </button>
+          </div>
+          
+          <div className="flex flex-col items-center gap-8">
+            {filtered.length > 0 ? filtered.map(ev => (
+              <EventCard 
+                key={ev.id}
+                id={ev.id}
+                title={ev.title}
+                subtitle={ev.sub} 
+                color={ev.color}
+                rating={ev.rating}
+                time={ev.time}
+                date={ev.date}
+                shapeType={ev.shape} 
+                isHearted={heartedIds.includes(ev.id)} 
+                onToggleHeart={onToggleHeart}
+                onClick={() => onEventClick(ev)}
+              />
+            )) : (
+              <div className="py-24 text-center">
+                 <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                   <Search size={40} className="text-black/10" />
+                 </div>
+                 <p className="font-black uppercase text-black/30 tracking-widest text-[14px]">Ничего не нашли...</p>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div className="py-20 text-center opacity-10">
+           <Sparkles size={100} className="mx-auto mb-6" />
+           <p className="font-black uppercase tracking-widest text-[18px]">Введи название или категорию</p>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const DetailScreen = ({ event, onBack, isHearted, onToggleHeart, onApply, isApplied }) => {
   return (
@@ -297,11 +505,9 @@ const NotificationModal = ({ notification, onClose }) => {
     );
 };
 
-// Добавляем вспомогательный компонент для экрана календаря
 const CalendarScreen = ({ events, onEventClick, heartedIds, onToggleHeart }) => {
   const [selectedDate, setSelectedDate] = useState('Сегодня');
   
-  // Массив дней для горизонтального календаря (на основе твоих данных)
   const days = [
     { day: 'Пн', date: '28' },
     { day: 'Вт', date: '29' },
@@ -312,15 +518,13 @@ const CalendarScreen = ({ events, onEventClick, heartedIds, onToggleHeart }) => 
     { day: 'Вс', date: '04' },
   ];
 
-  // Фильтрация событий по выбранной дате (сопоставляем с полем date в массиве)
   const filteredEvents = events.filter(ev => {
     if (selectedDate === 'Сегодня') return ev.isToday;
-    return ev.date.includes(selectedDate); // Простой поиск по числу
+    return ev.date.includes(selectedDate);
   });
 
   return (
     <div className="animate-in fade-in duration-500 pb-20">
-      {/* Горизонтальный календарь */}
       <div className="flex justify-between items-center mb-10 px-2">
         {days.map((d, i) => (
           <div 
@@ -336,12 +540,13 @@ const CalendarScreen = ({ events, onEventClick, heartedIds, onToggleHeart }) => 
         ))}
       </div>
 
-      {/* Список карточек для выбранной даты */}
       <div className="space-y-6 flex flex-col items-center">
         {filteredEvents.length > 0 ? filteredEvents.map(ev => (
           <div key={ev.id} className="w-full flex justify-center">
             <EventCard 
               {...ev}
+              id={ev.id}
+              title={ev.title}
               subtitle={ev.sub}
               shapeType={ev.shape}
               isHearted={heartedIds.includes(ev.id)}
@@ -394,7 +599,7 @@ export default function App() {
       icon: '🏆',
       title: 'Новый уровень!',
       text: 'Проект получил приз зрительских симпатий. Вам начислено 500 баллов.',
-      detailText: 'Ваш проект "Smart City Solution" набрал 1,240 голосов! Это абсолютный рекорд сезона. На ваш счет зачислено 500 Ulys-коинов, которые можно обменять на мерч в магазине приложений.',
+      detailText: 'Ваш проект "Smart City Solution" набрал 1 240 голосов и стал рекордом сезона. Проект вызвал большой интерес у сообщества. Поздравляем с таким результатом!',
       time: '1 ЧАС НАЗАД',
       hasAction: true
     },
@@ -446,8 +651,11 @@ export default function App() {
       rating: '5.0', 
       time: '09:00', 
       date: '25 Октября', 
+      city: 'Астана',
+      format: 'Оффлайн',
+      price: 'Бесплатно',
       isToday: false,
-      description: "Digital Bridge — главное технологическое событие региона, где встречаются стартапы, инвесторы и лидеры IT-индустрии. На форуме проходят выступления мировых экспертов, презентации инновационных проектов и обсуждения будущего технологий. Участники могут узнать о развитии искусственного интеллекта, финтеха и цифровой экономики, а также познакомиться с людьми, которые создают новые технологические продукты. Это отличное место, чтобы вдохновиться идеями и найти единомышленников." ,
+      description: "Digital Bridge — главное технологическое событие региона, где встречаются стартапы, инвесторы и лидеры IT-индустрии." ,
       image: "https://www.akorda.kz/public/assets/media/uploadMedia/1697090388_KZ1_5669.jpg_2.jpg"
     },
     { 
@@ -460,8 +668,11 @@ export default function App() {
       rating: '4.7', 
       time: '14:30', 
       date: '18 Июня', 
+      city: 'Алматы',
+      format: 'Оффлайн',
+      price: 'Бесплатно',
       isToday: false,
-      description: "Добро пожаловать на главную площадку нетворкинга! Мы создаем условия для твоего роста: знакомься с инвесторами и изучай кейсы.",
+      description: "Добро пожаловать на главную площадку нетворкинга!",
       image: "https://dknews.kz/storage/news/2025-11/HoiUlSy7fp1QKh6tX1IQ3u3IRP1w6pXUr8AJUqFt.jpg"
     },
     { 
@@ -474,8 +685,11 @@ export default function App() {
       rating: '4.9', 
       time: '10:00', 
       date: 'Сегодня', 
+      city: 'Алматы',
+      format: 'Оффлайн',
+      price: 'Бесплатно',
       isToday: true,
-      description: "Готов бросить вызов системе? 48 часов кодинга, где ты и твоя команда создадите будущее на Web3.",
+      description: "Готов бросить вызов системе?",
       image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1000"
     },
     { 
@@ -488,8 +702,11 @@ export default function App() {
       rating: '4.9', 
       time: 'Онлайн', 
       date: 'Сен 2026', 
+      city: 'Любой',
+      format: 'Онлайн',
+      price: 'Платно',
       isToday: false,
-      description: "Учись создавать интерфейсы, которыми будут пользоваться миллионы! Освоишь Figma и основы UX-исследований.",
+      description: "Учись создавать интерфейсы, которыми будут пользоваться миллионы!",
       image: "https://lh3.googleusercontent.com/ajzo5c1pfilAu0NGaGIinoznycYiMNu1LDvUXz3PQ1D390vPRfaAgJNlY41S69-y6wdXlw1HS5dA9vpeOgptyvKsO3NmHR2wj5gHokY"
     },
     { 
@@ -502,8 +719,11 @@ export default function App() {
       rating: '5.0', 
       time: '09:00', 
       date: 'Декабрь 2026', 
+      city: 'Астана',
+      format: 'Оффлайн',
+      price: 'Платно',
       isToday: false,
-      description: "Форум для будущих дипломатов и глобальных лидеров. Научись вести переговоры и решать мировые конфликты.",
+      description: "Форум для будущих дипломатов и глобальных лидеров.",
       image: "https://www.montana-zug.ch/hs-fs/hubfs/IMZ-MUN2024_3G2A6708.jpg?width=2000&height=1333&name=IMZ-MUN2024_3G2A6708.jpg"
     },
     { 
@@ -516,9 +736,12 @@ export default function App() {
       rating: '4.8', 
       time: '11:00', 
       date: '25 Мая', 
+      city: 'Шымкент',
+      format: 'Оффлайн',
+      price: 'Бесплатно',
       isToday: false,
-      description: "Математика — это язык будущего. Прими участие в интеллектуальном вызове и докажи свой уровень мастерства.",
-      image: "https://png.pngtree.com/thumb_back/fw800/background/20251127/pngtree-a-hand-writing-complex-mathematical-equations-and-graphs-on-blackboard-image_20633177.webp"
+      description: "Математика — это язык будущего.",
+      image: "https://media.istockphoto.com/id/477979280/ru/%D0%B2%D0%B5%D0%BA%D1%82%D0%BE%D1%80%D0%BD%D0%B0%D1%8F/%D0%B0%D0%BB%D0%B3%D0%B5%D0%B1%D1%80%D0%B0-%D1%84%D0%BE%D1%80%D0%BC%D1%83%D0%BB%D0%B0-%D0%B4%D0%BE%D1%81%D0%BA%D0%B0.jpg?s=1024x1024&w=is&k=20&c=r0cd5OMYfMNpWNB-bkDYUOmufPY9J4rPx5irWshdsVY="
     },
     { 
       id: 'ev-7', 
@@ -530,8 +753,11 @@ export default function App() {
       rating: '4.6', 
       time: '19:00', 
       date: 'Сегодня', 
+      city: 'Алматы',
+      format: 'Оффлайн',
+      price: 'Бесплатно',
       isToday: true,
-      description: "Закрытые питч-сессии стартапов перед бизнес-ангелами. Узнай, как привлечь первые инвестиции.",
+      description: "Закрытые питч-сессии стартапов перед бизнес-ангелами.",
       image: "https://lh3.googleusercontent.com/proxy/uSIYfk-29Lv2b0f9x3W0BHXPwkLq33UFle38YLorYlXloqhPiDpPYglKxkiNVRDL-HRLVl0lWiN1bq7vl33YWfJ3h62hrjpSn1aq3w"
     },
     { 
@@ -544,24 +770,14 @@ export default function App() {
       rating: '5.0', 
       time: 'Full-time', 
       date: 'Лето 2026', 
+      city: 'Любой',
+      format: 'Онлайн',
+      price: 'Платно',
       isToday: false,
-      description: "Стажировка STEP создана специально для талантливых студентов младших курсов. Работай над реальными проектами Google.",
+      description: "Стажировка STEP создана специально для талантливых студентов.",
       image: "https://media.geeksforgeeks.org/wp-content/cdn-uploads/20220720121505/google2.jpg"
     },
-    { 
-      id: 'ev-9', 
-      section: 'Стажировки', 
-      title: 'Kaspi Lab', 
-      sub: 'Data Science & Analytics', 
-      color: '#4A80FF', 
-      shape: 'lightning-with-circle', 
-      rating: '4.8', 
-      time: 'Part-time', 
-      date: 'Июль 2026', 
-      isToday: false,
-      description: "Погрузись в анализ данных самого успешного финтех-проекта! Учись строить предиктивные модели.",
-      image: "https://the-steppe.com/wp-content/uploads/2018/12/f6f07f957ddd5b76b33796b3d381134a.jpg"
-    },
+        
     { 
       id: 'ev-10', 
       section: 'Волонтерство', 
@@ -577,6 +793,7 @@ export default function App() {
       image: "https://www.ecoscore.space/img/logo.png"
     }
   ];
+  
   const toggleHeart = (id) => {
     setHeartedIds(prev => 
       prev.includes(id) 
@@ -706,7 +923,7 @@ export default function App() {
       <div className="w-full px-4 sm:px-8 md:px-12">
         <header className="pt-10 sm:pt-14 pb-8 flex justify-between items-start">
           <h1 className="text-[38px] sm:text-[50px] font-black tracking-tighter text-black leading-none">
-            {currentView === 'home' ? 'Привет, Паша!' : currentView === 'favorites' ? 'Избранное' : 'Календарь'}
+            {currentView === 'home' ? 'Привет, Паша!' : currentView === 'favorites' ? 'Избранное' : currentView === 'search' ? 'Поиск' : 'Календарь'}
           </h1>
           {currentView === 'home' && (
             <button 
@@ -824,8 +1041,13 @@ export default function App() {
                      {events.map((ev) => (
                        <EventCard
                          key={ev.id}
-                         {...ev}
+                         id={ev.id}
+                         title={ev.title}
                          subtitle={ev.sub}
+                         color={ev.color}
+                         rating={ev.rating}
+                         time={ev.time}
+                         date={ev.date}
                          shapeType={ev.shape}
                          isHearted={true}
                          onToggleHeart={toggleHeart}
@@ -851,6 +1073,16 @@ export default function App() {
             onToggleHeart={toggleHeart}
           />
         )}
+
+        {currentView === 'search' && (
+          <SearchScreen 
+            events={allEventsData}
+            onEventClick={setViewingEvent}
+            heartedIds={heartedIds}
+            onToggleHeart={toggleHeart}
+            EventCard={EventCard}
+          />
+        )}
       </div>
 
       <div className="fixed bottom-6 left-0 right-0 flex justify-center px-4 z-[99]">
@@ -863,7 +1095,9 @@ export default function App() {
             <Calendar size={26} className={currentView === 'calendar' ? "text-[#FF3B30]" : "text-black"} strokeWidth={2.5} />
           </button>
 
-          <button><Search size={26} className="text-black" /></button>
+          <button onClick={() => { setCurrentView('search'); setViewingEvent(null); }}>
+            <Search size={26} className={currentView === 'search' ? "text-[#FF3B30]" : "text-black"} strokeWidth={2.5} />
+          </button>
           
           <button onClick={() => { setCurrentView('favorites'); setViewingEvent(null); }}>
             <BookOpen size={26} className={currentView === 'favorites' ? "text-[#FF3B30]" : "text-black"} strokeWidth={2.5} />
